@@ -1,0 +1,29 @@
+# KHÔNG đẩy API key của gemini lên
+.env
+*.env
+.env.local
+
+# 2. file rác của Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyd
+
+# 3. virtual environment
+.venv/
+venv/
+ENV/
+env/
+
+# 4. cấu hình vscode
+.vscode/
+.idea/
+
+# 5. hệ điều hành
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store
+
+# 6. file tạm hoặc script test cá nhân
+src/data_from_postgresql.py
