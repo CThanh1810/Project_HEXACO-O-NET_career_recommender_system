@@ -8,6 +8,10 @@ scikit-learn>=1.3.0
 google-genai>=0.1.0
 python-dotenv>=1.0.0
 
+# Web Application (Interactive UI)
+streamlit>=1.30.0
+Pillow>=10.0.0
+
 # Optional: NLP Semantic Embedding Mapping (mapping_hexaco_to_workstyles.py)
 sentence-transformers>=2.2.0
 torch>=2.0.0

@@ -56,9 +56,13 @@ $$\text{Score}_{\text{O*NET}, j} = \Phi\left(Z_{\text{workstyle}, j}\right) \tim
 * **$Z = +1.0$** $\rightarrow$ **$84.1\%$** (Superior Aptitude)
 * **$Z = -1.0$** $\rightarrow$ **$15.9\%$** (Low Affinity)
 
-#### 4. Occupational Profile Matching
-Candidate vector $\mathbf{u} \in \mathbb{R}^{21}$ is matched against 882 occupational benchmark vectors $\mathbf{v}_k \in \mathbb{R}^{21}$ from the US Department of Labor O*NET database via Cosine Similarity:
-$$\text{Match Score}(\mathbf{u}, \mathbf{v}_k) = \frac{\mathbf{u} \cdot \mathbf{v}_k}{\|\mathbf{u}\|_2 \|\mathbf{v}_k\|_2} \times 100$$
+#### 4. Multi-Criteria Occupational Profile Matching
+Candidate vector $\mathbf{u} \in \mathbb{R}^{21}$ is matched against occupational benchmark vectors $\mathbf{v}_k \in \mathbb{R}^{21}$ from the US Department of Labor O*NET database via Cosine Similarity:
+$$\text{Match Score}(\mathbf{u}, \mathbf{v}_k) = \frac{\mathbf{u} \cdot \mathbf{v}_k}{\|\mathbf{u}\|_2 \|\mathbf{v}_k\|_2} \times 100\%$$
+
+To ensure realistic, practical guidance, the system supports multi-criteria constraints:
+* **Educational Feasibility (Job Zones 1–5):** Filters careers based on required education level, ranging from high school (Zone 1) and vocational training (Zone 3) to Bachelor's (Zone 4) and Graduate/Medical degrees (Zone 5).
+* **Industry Focus (22 Job Families):** Allows targeting specific career families (e.g., *Computer & Mathematical*, *Business & Financial*, *Healthcare*, *Management*).
 
 ### 🔬 Dual-Engine Alignment Comparison
 
@@ -78,10 +82,12 @@ Job_suggest_using_hexaco_scores/
 │   ├── onet_workstyles.csv          # Curated dataset of 882 O*NET occupations
 │   └── gemini_mapping_weights.json  # 21x24 alignment weights & psychological reasoning
 ├── src/
+│   ├── vision_parser.py             # Gemini Vision OCR & File Dialog parser
 │   ├── generate_weights_gemini.py   # Checkpointed script calling Gemini API
 │   ├── mapping_LLM.py               # Z-score & Norm CDF calculation engine
 │   ├── mapping_hexaco_to_workstyles.py # Alternative SBERT embedding pipeline
 │   └── compare.py                   # Occupational similarity matcher
+├── app.py                           # Streamlit interactive Web Application
 ├── main.py                          # Unified CLI entry point
 ├── requirements.txt                 # Clean minimal dependencies
 ├── .gitignore                       # Secures .env secrets and cache
@@ -99,6 +105,10 @@ pip install -r requirements.txt
 
 #### 2. Run Career Recommender
 ```bash
+# Option A: Launch Interactive Web App (Recommended)
+streamlit run app.py
+
+# Option B: Run Command Line Interface (CLI)
 python main.py
 ```
 
@@ -199,9 +209,13 @@ $$\text{Score}_{\text{O*NET}, j} = \Phi\left(Z_{\text{workstyle}, j}\right) \tim
 * **$Z = +1.0$** $\rightarrow$ **$84.1\%$** (Năng lực vượt trội so với đa số)
 * **$Z = -1.0$** $\rightarrow$ **$15.9\%$** (Thiên hướng thấp)
 
-#### 4. Thuật Toán Gợi Ý Việc Làm (Vector Similarity)
-Vector năng lực của ứng viên $\mathbf{u} \in \mathbb{R}^{21}$ được so sánh với vector yêu cầu của 882 nghề nghiệp $\mathbf{v}_k \in \mathbb{R}^{21}$ trong cơ sở dữ liệu O*NET bằng độ tương đồng Cosine:
+#### 4. Thuật Toán Gợi Ý Việc Làm Đa Tiêu Chí (Multi-Criteria Matching)
+Vector năng lực của ứng viên $\mathbf{u} \in \mathbb{R}^{21}$ được so sánh với vector yêu cầu của các nghề nghiệp $\mathbf{v}_k \in \mathbb{R}^{21}$ trong cơ sở dữ liệu O*NET bằng độ tương đồng Cosine:
 $$\text{Độ Khớp}(\mathbf{u}, \mathbf{v}_k) = \frac{\mathbf{u} \cdot \mathbf{v}_k}{\|\mathbf{u}\|_2 \|\mathbf{v}_k\|_2} \times 100\%$$
+
+Để đảm bảo tính khả thi thực tế ngoài đời, hệ thống tích hợp bộ lọc kép:
+* **Trình độ học vấn (Job Zones 1–5):** Phân loại từ không cần bằng cấp (Zone 1), Cao đẳng/trường nghề (Zone 3), Bằng Đại học (Zone 4) đến Sau Đại học / Bác sĩ (Zone 5).
+* **Khối ngành nghề (22 Job Families):** Lọc theo lĩnh vực chuyên môn mong muốn (CNTT, Kinh doanh & Tài chính, Y tế, Quản lý, Kỹ thuật...).
 
 ### 🔬 So Sánh Hai Phương Pháp Tiếp Cận (Gemini vs SBERT)
 
@@ -222,6 +236,10 @@ pip install -r requirements.txt
 
 #### 2. Chạy gợi ý nghề nghiệp:
 ```bash
+# Cách 1: Khởi chạy Giao diện Web trực quan (Khuyên dùng)
+streamlit run app.py
+
+# Cách 2: Chạy trực tiếp từ dòng lệnh (CLI)
 python main.py
 ```
 
